@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -14,7 +16,7 @@
     />
 
     <title>AHP Decision Maker</title>
-    <header><img src="./BULOGISTICS.png" style="height: 100px;width: 100px;position: absolute;" alt="OCP Group Logo"></header>
+    <!-- <header><img src="./BULOGISTICS.png" style="height: 100px;width: 100px;position: absolute;" alt="OCP Group Logo"></header> -->
     <style>
       /* Custom CSS */
       :root {
@@ -244,8 +246,11 @@
   </head>
 
   <body>
+    <img src="./BULOGISTICS.png" style="height: 100px;width: 100px;align-self:flex-start;" alt="OCP Group Logo"/>
     <h1>Prise de Décision Stratégique</h1>
-    <div id="criteria-section" class="container">
+    
+    <div class="container-fluid">
+      <div id="criteria-section" class="container">
       <h2>Introduction :</h2>
       <p>Le Processus Hiérarchique Analytique (AHP) est une méthode de prise de décision qui permet 
         de prioriser les alternatives en fonction de leur importance relative. Il consiste à décomposer 
@@ -391,7 +396,7 @@
       <p>Dans cette section, les opportunités sont triées en fonction de leur importance.<br/>
       Cela signifie que, selon la méthode AHP, la <strong>première opportunité est la plus stratégique</strong>.</p>
     </div>
-    
+  </div>
 
     <script>
       var criteriaList = [];
