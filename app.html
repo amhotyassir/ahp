@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>AHP Decision Maker</title>
+    <header><img src="./BULOGISTICS.png" style="height: 100px;width: 100px;position: absolute;" alt="OCP Group Logo"></header>
+    <style>
+      /* Custom CSS */
+      :root {
+        /* --bs-primary: #68b333; */
+        --primary-color: #68b333;
+      }
+      /* .btn-primary {
+        background-color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+        font-weight: bold;
+      }
+      .btn-primary:hover,
+      .btn-primary:focus{
+        background-color: white;
+      } */
+      .btn-primary {
+        --bs-btn-color: #fff;
+        --bs-btn-bg: #68b333;
+        --bs-btn-border-color: #98C928;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: #98C928;
+        --bs-btn-hover-border-color: #68b333;
+        --bs-btn-focus-shadow-rgb: 49, 132, 253;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: #68b333;
+        --bs-btn-active-border-color: #0a53be;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #fff;
+        --bs-btn-disabled-bg: #68b333;
+        --bs-btn-disabled-border-color: #68b333;
+      }
+      .form-control:focus {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 0.25rem rgba(104, 179, 51, 0.25) !important;
+        outline: none !important;
+      }
+
+      /* CSS styles omitted for brevity */
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      input[type="number"] {
+        width: 80%;
+        height: 60%;
+        text-align: center;
+      }
+      .modified-cell {
+        border: 1px solid lawngreen;
+      }
+
+      .error-cell {
+        outline: 2px solid red;
+      }
+
+      /* Loading Spinner Styles */
+      .loading-spinner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 200px;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #ccc;
+        border-top-color: #68b333;
+        border-radius: 50%;
+        animation: spin 1s infinite linear;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Result Display Styles */
+      .result {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+      }
+
+      .result .title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .result .validation-mark {
+        font-size: 50px;
+        margin-bottom: 20px;
+      }
+
+      .result .valid {
+        color: green;
+      }
+
+      .result .invalid {
+        color: red;
+      }
+      .validation-mark {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-left: 5px;
+      }
+
+      .green {
+        background-color: green;
+      }
+
+      .red {
+        background-color: red;
+      }
+
+      .error-text {
+        color: red;
+        font-weight: bold;
+      }
+
+      .modified-cell {
+        background-color: #e2e2e2;
+      }
+      h1 {
+        font-family: "Anton";
+        color: #68b332;
+        margin-bottom: 100px;
+        margin-top: 20px;
+        font-size: 50px;
+        text-align: center;
+      }
+      h2 {
+        margin: 20px 0;
+        font-size: 24px;
+        font-weight: bold;
+        color: #2E843B;
+      }
+      .niceLi {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        width: 40%;
+        margin-left: 10%;
+        justify-content: space-between;
+      }
+
+      .niceLi button {
+        margin-left: 10px;
+        padding: 5px 10px;
+        border: none;
+
+        background-color: #cc0000;
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      .container{
+        scroll-behavior: smooth;
+      }
+      .niceLi button:hover {
+        background-color: rgba(255, 0, 0, 0.5);
+      }
+
+      .niceLi button:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.5);
+      }
+      .niceLi span{
+        font-weight: bolder;
+        font-size: larger;
+        text-transform: capitalize;
+      }
+      input[type="text"] {
+      text-transform: capitalize;
+      }
+      .proceed{
+        --bs-btn-color: #fff;
+        --bs-btn-bg: #2E843B;
+        --bs-btn-border-color: #2E843B;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: #98C928;
+        --bs-btn-hover-border-color: #98C928;
+        --bs-btn-focus-shadow-rgb: 49, 132, 253;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: #2E843B;
+        --bs-btn-active-border-color: #0a53be;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #fff;
+        --bs-btn-disabled-bg: #2E843B;
+        --bs-btn-disabled-border-color: #2E843B;
+      }
+      body {
+        margin-bottom: 40px; /* Adjust the value to your desired margin */
+        margin-top: 20px;
+      }
+      #proceed-button {
+  margin-top: 20px; /* Adjust the value to your desired top margin */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+#sortedOpportunitiesList{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px; /* Adjust the height as needed */
+    overflow-y: scroll;
+    text-align: center;
+}
+    </style>
+  </head>
+
+  <body>
+    <h1>Prise de Décision Stratégique</h1>
+    <div id="criteria-section" class="container">
+      <h2>Introduction :</h2>
+      <p>Le Processus Hiérarchique Analytique (AHP) est une méthode de prise de décision qui permet 
+        de prioriser les alternatives en fonction de leur importance relative. Il consiste à décomposer 
+        des décisions complexes en une structure hiérarchique et à utiliser des comparaisons par paires 
+        pour déterminer les poids de chaque élément. L'AHP prend en compte des facteurs qualitatifs et 
+        quantitatifs pour fournir une approche de prise de décision systématique et éclairée. Cette 
+        plateforme fait partie du Projet d'Intégration de Développement Commercial et sert d'interface 
+        conviviale pour mettre en œuvre la méthode AHP. Elle simplifie le processus de structuration des 
+        problèmes de décision, de réalisation des comparaisons, de calcul des priorités et de visualisation 
+        des résultats.<br/>
+        En utilisant l'AHP, la plateforme améliore la qualité des décisions et soutient les 
+        initiatives de développement commercial.
+      </p>
+      <h3 style="text-decoration-line: underline;">P.S :</h3>
+      <p>À chaque étape, vous trouverez des instructions claires en bas de la page.</p>
+      <h2>Ajouter des critères :</h2>
+    
+      <div class="row">
+        <div class="col">
+          <input
+            type="text"
+            id="criteria-input"
+            class="form-control"
+            placeholder="Entrez le nom du critère"
+          />
+        </div>
+        <div class="col-auto">
+          <button
+            onclick="addCriteria()"
+            class="btn btn-primary"
+            id="add-criteria-button"
+          >
+            Ajouter un critère
+          </button>
+        </div>
+      </div>
+    
+      <h2>Critères sélectionnés :</h2>
+      <ul id="criteria-list" class="list-group">
+        <!-- Dynamiquement peuplé avec les critères sélectionnés -->
+      </ul>
+    
+      <!-- Section des opportunités -->
+    
+      <h2>Ajouter une opportunité :</h2>
+      <div class="row">
+        <div class="col">
+          <input
+            type="text"
+            id="opportunity-input"
+            class="form-control"
+            placeholder="Entrez une opportunité"
+          />
+        </div>
+        <div class="col-auto">
+          <button id="add-opportunity-btn" class="btn btn-primary">
+            Ajouter une opportunité
+          </button>
+        </div>
+      </div>
+    
+      <h2>Opportunités sélectionnées :</h2>
+      <ul id="opportunities-list" class="list-group">
+        <!-- Les opportunités existantes seront ajoutées dynamiquement ici -->
+      </ul>
+    
+      <button
+        id="proceed-button"
+        onclick="showPairwiseComparison()"
+        class="btn btn-primary proceed"
+        style="display: none"
+      >
+        Passer à la Comparaison par Paires
+      </button>
+    
+      <h2>Instructions :</h2>
+      <ol>
+        <li>Cliquez sur le bouton <strong>"Ajouter un critère"</strong> pour ajouter les critères sur lesquels vous baserez votre décision.</li>
+        <li>Entrez le nom du critère dans le champ d'entrée prévu et cliquez sur <strong>"Ajouter"</strong> pour l'inclure.</li>
+        <li>Répétez les étapes ci-dessus pour ajouter tous les critères pertinents.</li>
+        <li>Dans la section "Critères sélectionnés", vous verrez la liste des critères que vous avez ajoutés.</li>
+        <li>Cliquez sur le bouton <strong>"Ajouter une opportunité"</strong> pour ajouter les opportunités sur lesquelles vous souhaitez prendre une décision.</li>
+        <li>Entrez le nom de l'opportunité dans le champ d'entrée prévu et cliquez sur <strong>"Ajouter"</strong> pour l'inclure.</li>
+        <li>Répétez les étapes ci-dessus pour ajouter toutes les opportunités souhaitées.</li>
+        <li>Dans la section "Opportunités sélectionnées", vous verrez la liste des opportunités que vous avez ajoutées.</li>
+        <li>Lorsque vous avez sélectionné trois critères ou plus et deux opportunités ou plus, un bouton sera affiché pour vous permettre de passer à la comparaison par paires.</li>
+      </ol>
+    </div>
+    
+    <div
+      id="pairwise-comparison-section"
+      class="container"
+      style="display: none"
+    >
+      <h2>Comparaison par Paires</h2>
+      <table id="comparison-table" class="table">
+        <!-- Dynamiquement peuplé avec les cellules de comparaison par paires -->
+      </table>
+      <div class="d-flex justify-content-between">
+        <button onclick="goBackToCriteriaSection()" class="btn btn-secondary">
+          Retour
+        </button>
+        <button
+          id="next-button"
+          onclick="showNextPhase()"
+          class="btn btn-primary"
+          style="display: none"
+        >
+          Suivant
+        </button>
+      </div>
+      <h2>Instructions</h2>
+      <p>Dans cette étape, vous allez comparer les critères deux par deux. Pour chaque paire, attribuez un score en utilisant l'Échelle du Processus Hiérarchique Analytique (AHP). Les scores représentent l'importance ou la préférence relative d'un critère par rapport à un autre. Utilisez l'échelle AHP pour déterminer l'importance des comparaisons par paires.</p>
+      <ul>
+        <li>Dans l'étape de comparaison par paires, vous devrez saisir des scores allant de 1 à 9 pour chaque cellule.</li>
+        <li>Les cellules symétriques seront automatiquement mises à jour, même si elles semblent vides.</li>
+        <li>Une fois que toutes les cellules sont remplies et affichées en vert, vous pouvez passer à l'étape suivante.</li>
+      </ul>
+      <h3 style="text-decoration: underline;">P.S :</h3>
+      <ul>
+        <li>1 : Les deux critères sont également importants ou préférables.</li>
+        <li>3 : Légèrement ou modérément plus important ou préférable.</li>
+        <li>5 : Nettement plus important ou préférable.</li>
+        <li>7 : Très nettement plus important ou préférable.</li>
+        <li>9 : Absolument plus important ou préférable.</li>
+      </ul>
+    </div>
+    
+    <div id="loading-section" class="container" style="display: none">
+      <h2>Chargement en cours...</h2>
+      <!-- Des indicateurs de chargement supplémentaires ou des messages peuvent être ajoutés ici -->
+    </div>
+    
+    <div id="result-section" class="container" style="display: none">
+      <!-- Les composants de résultat peuvent être ajoutés ici -->
+      
+      
+    </div>
+    
+    <div id="opportunitiesSection" class="container" style="display: none">
+      <!-- La décision peut être ajoutée ici -->
+      <h2>Instructions :</h2>
+      <p>Dans cette section, les opportunités sont triées en fonction de leur importance.<br/>
+      Cela signifie que, selon la méthode AHP, la <strong>première opportunité est la plus stratégique</strong>.</p>
+    </div>
+    
+
+    <script>
+      var criteriaList = [];
+      var opportunityList = [];
+      var comparisonMatrix = [];
+      var decisionMatrix = [];
+
+      function addCriteria() {
+        var criteriaInput = document.getElementById("criteria-input");
+        var text = criteriaInput.value.trim();
+        var criteriaName=text.charAt(0).toUpperCase() + text.slice(1)
+        if (criteriaList.length === 10) {
+          return null;
+        }
+        if (criteriaName !== "") {
+          criteriaList.push(criteriaName);
+          criteriaInput.value = "";
+
+          displayCriteriaList();
+        }
+        var addButton = document.getElementById("add-criteria-button");
+        if (criteriaList.length === 10) {
+          addButton.disabled = true;
+        }
+        if (criteriaList.length < 10) {
+          addButton.disabled = false;
+        }
+        toggleProceedButton();
+      }
+
+      function deleteCriteria(index) {
+        criteriaList.splice(index, 1);
+
+        displayCriteriaList();
+      }
+
+      function displayCriteriaList() {
+        var criteriaListElem = document.getElementById("criteria-list");
+        criteriaListElem.innerHTML = "";
+
+        for (var i = 0; i < criteriaList.length; i++) {
+          var criteriaItem = document.createElement("li");
+          criteriaItem.classList.add('niceLi')
+          var criteriaName = document.createElement("span");
+          criteriaName.textContent = criteriaList[i];
+
+          var deleteButton = document.createElement("button");
+          deleteButton.textContent = "Supprimer";
+          deleteButton.addEventListener(
+            "click",
+            (function (index) {
+              return function () {
+                deleteCriteria(index);
+                var addButton = document.getElementById("add-criteria-button");
+                addButton.disabled = false;
+                if (criteriaList.length<3){
+                var proceedButton=document.getElementById('proceed-button')
+                proceedButton.style.display='none'
+              }
+              displayOpportunityList();
+              };
+            })(i)
+          );
+
+          criteriaItem.appendChild(criteriaName);
+          criteriaItem.appendChild(deleteButton);
+
+          criteriaListElem.appendChild(criteriaItem);
+          // criteriaItem.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+
+      function addOpportunity() {
+        var opportunityInput = document.getElementById("opportunity-input");
+        var text = opportunityInput.value.trim();
+        var opportunityName=text.charAt(0).toUpperCase() + text.slice(1)
+        if (opportunityName !== "") {
+          opportunityList.push(opportunityName);
+          opportunityInput.value = "";
+
+          displayOpportunityList();
+          toggleProceedButton();
+        }
+      }
+
+      // Supprimer Opportunity
+      function deleteOpportunity(index) {
+        opportunityList.splice(index, 1);
+        if (opportunityList.length<2){
+          var proceedButton=document.getElementById('proceed-button')
+          proceedButton.style.display='none'
+        }
+        displayOpportunityList();
+      }
+
+      // Display Opportunity List
+      function displayOpportunityList() {
+        var opportunityListElem = document.getElementById("opportunities-list");
+        opportunityListElem.innerHTML = "";
+
+        for (var i = 0; i < opportunityList.length; i++) {
+          var opportunityItem = document.createElement("li");
+          opportunityItem.classList.add('niceLi')
+          var opportunityName = document.createElement("span");
+          opportunityName.textContent = opportunityList[i];
+
+          var deleteButton = document.createElement("button");
+          deleteButton.textContent = "Supprimer";
+          deleteButton.addEventListener(
+            "click",
+            deleteOpportunity.bind(null, i)
+
+            
+          );
+
+          opportunityItem.appendChild(opportunityName);
+          opportunityItem.appendChild(deleteButton);
+
+          opportunityListElem.appendChild(opportunityItem);
+          // opportunityItem.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+
+      // Add Criteria button event listener
+      // var addCriteriaBtn = document.getElementById("add-criteria-btn");
+      // addCriteriaBtn.addEventListener("click", addCriteria);
+
+      // Add Opportunity button event listener
+      var addOpportunityBtn = document.getElementById("add-opportunity-btn");
+      addOpportunityBtn.addEventListener("click", addOpportunity);
+
+      // Display initial lists
+      // displayCriteriaList();
+      // displayOpportunityList();
+
+      function showPairwiseComparison() {
+        if (criteriaList.length < 2) {
+          alert(
+            "Please add at least 2 criteria before proceeding to pairwise comparison."
+          );
+        } else {
+          document.getElementById("criteria-section").style.display = "none";
+          document.getElementById("pairwise-comparison-section").style.display =
+            "block";
+
+          generateComparisonTable();
+        }
+      }
+
+      function generateComparisonTable() {
+        var comparisonTable = document.getElementById("comparison-table");
+        comparisonTable.innerHTML = "";
+
+        var tableHeader = document.createElement("tr");
+        var emptyHeaderCell = document.createElement("th");
+        tableHeader.appendChild(emptyHeaderCell);
+
+        for (var i = 0; i < criteriaList.length; i++) {
+          var headerCell = document.createElement("th");
+          headerCell.textContent = criteriaList[i];
+          tableHeader.appendChild(headerCell);
+        }
+
+        comparisonTable.appendChild(tableHeader);
+
+        for (var i = 0; i < criteriaList.length; i++) {
+          var row = document.createElement("tr");
+
+          var headerCell = document.createElement("th");
+          headerCell.textContent = criteriaList[i];
+          row.appendChild(headerCell);
+
+          for (var j = 0; j < criteriaList.length; j++) {
+            var cell;
+            if (i === j) {
+              cell = document.createElement("td");
+              cell.textContent = "1";
+            } else {
+              cell = document.createElement("td");
+              var input = document.createElement("input");
+              input.type = "number";
+              input.min = "1";
+              input.max = "9";
+              input.addEventListener(
+                "input",
+                updateComparisonScore.bind(null, i, j)
+              );
+              cell.appendChild(input);
+            }
+            row.appendChild(cell);
+          }
+
+          comparisonTable.appendChild(row);
+        }
+      }
+
+      function updateComparisonScore(row, col) {
+        var value = parseInt(event.target.value);
+        if (!comparisonMatrix) {
+          comparisonMatrix = [];
+          for (var i = 0; i < criteriaList.length; i++) {
+            comparisonMatrix[i] = [];
+            for (var j = 0; j < criteriaList.length; j++) {
+              comparisonMatrix[i][j] = null; // Initialize with null values
+            }
+          }
+        }
+
+        // Initialize comparisonMatrix with empty arrays if not already initialized
+        if (!comparisonMatrix[row]) {
+          for (var i = 0; i < criteriaList.length; i++) {
+            comparisonMatrix[i] = [];
+            for (var j = 0; j < criteriaList.length; j++) {
+              comparisonMatrix[i][j] = null; // Initialize with null values
+              if (i === j) {
+                comparisonMatrix[i][j] = 1;
+              }
+            }
+          }
+        }
+        if (!comparisonMatrix[col]) {
+          for (var i = 0; i < criteriaList.length; i++) {
+            comparisonMatrix[i] = [];
+            for (var j = 0; j < criteriaList.length; j++) {
+              comparisonMatrix[i][j] = null; // Initialize with null values
+              if (i === j) {
+                comparisonMatrix[i][j] = 1;
+              }
+            }
+          }
+        }
+
+        comparisonMatrix[row][col] = parseFloat(value);
+        comparisonMatrix[col][row] = 1 / parseFloat(value);
+
+        var comparisonTable = document.getElementById("comparison-table");
+        var modifiedCell =
+          comparisonTable.rows[row + 1].cells[col + 1].querySelector("input");
+        modifiedCell.classList.add("modified-cell");
+
+        var symmetricalCell =
+          comparisonTable.rows[col + 1].cells[row + 1].querySelector("input");
+        symmetricalCell.value = "";
+        symmetricalCell.classList.add("modified-cell");
+
+        var comparisonTable = document.getElementById("comparison-table");
+        var cells = comparisonTable.getElementsByTagName("input");
+
+        var allCellsModified = true;
+        for (var i = 0; i < cells.length; i++) {
+          if (!cells[i].classList.contains("modified-cell")) {
+            allCellsModified = false;
+            break;
+          }
+        }
+
+        var nextButton = document.getElementById("next-button");
+        if (allCellsModified) {
+          nextButton.style.display = "inline"; // Show the Next button
+        } else {
+          nextButton.style.display = "none"; // Hide the Next button
+        }
+
+        console.log(comparisonMatrix);
+      }
+
+      function toggleProceedButton() {
+        var proceedButton = document.getElementById("proceed-button");
+        if (criteriaList.length > 2 && opportunityList.length > 1) {
+          proceedButton.style.display = "block";
+          proceedButton.scrollIntoView({ behavior: "smooth" });
+          // console.log('show')
+        } else {
+          proceedButton.style.display = "none";
+        }
+      }
+
+      var criteriaInput = document.getElementById("criteria-input");
+      criteriaInput.addEventListener("keydown", function (event) {
+        // addButton=document.getElementById("add-criteria-button")
+        if (event.key === "Enter" && criteriaList.length < 10) {
+          addCriteria();
+        }
+      });
+
+      var opportunityInput = document.getElementById("opportunity-input");
+      opportunityInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          addOpportunity();
+        }
+      });
+
+      function goBackToCriteriaSection() {
+        document.getElementById("pairwise-comparison-section").style.display =
+          "none";
+        document.getElementById("criteria-section").style.display = "block";
+      }
+
+      var criteriaInput = document.getElementById("criteria-input");
+      criteriaInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          addCriteria();
+        }
+      });
+      window.addEventListener("beforeunload", function (event) {
+        event.preventDefault();
+        event.returnValue = ""; // Required for Chrome and Firefox
+        return ""; // Required for Safari
+      });
+
+      function showNextPhase() {
+        // decisionMatrix[opportunityList.length]=null
+        if (!decisionMatrix[opportunityList.length]) {
+          for (var i = 0; i < opportunityList.length; i++) {
+            decisionMatrix[i] = [];
+            for (var j = 0; j < criteriaList.length; j++) {
+              decisionMatrix[i][j] = null; // Initialize with null values
+            }
+          }
+        }
+
+        document.getElementById("pairwise-comparison-section").style.display =
+          "none";
+        document.getElementById("loading-section").style.display = "block";
+        document.getElementById("loading-section").style.display = "none";
+
+        var weightedSum = calculateWeightedSum(comparisonMatrix);
+        // var priorityWeights=calculatePriorityWeights(weightedSum);
+        var consistencyCheck = performConsistencyCheck(
+          comparisonMatrix,
+          weightedSum
+        );
+        var isConsistent = consistencyCheck < 0.1;
+
+        var resultSection = document.getElementById("result-section");
+        resultSection.style.display = "block";
+
+        // Clear previous result contents and make a Back button
+        resultSection.innerHTML =
+          ' <h2>Instructions :</h2><ol><li>If the system is inconsistent, an error message will be displayed. In this case, you need to check the consistency of the previously entered table.</li><li>If the system is consistent, a table will be shown. Each column (representing a criteria) requires you to enter scores (ranging from 1 to 9) for each opportunity.</li><li>It is recommended that you fill the table column by column to avoid confusion and stay focused on the scores for a particular criteria.</li></ol>';
+
+        console.log("isConsistent = ", consistencyCheck);
+        if (isConsistent) {
+          // Display green validation mark and other components signaling consistency
+          // resultSection.appendChild('<table id="evaluationTable"><tr><th>Opportunity</th></tr ></table >')
+          var table = document.createElement("table");
+          table.classList.add('table')
+          table.id = "last-table";
+          table.innerHTML = "";
+          // Create header row with criteria columns
+          var headerRow = table.insertRow(0);
+          var opportunityHeaderCell = headerRow.insertCell(0);
+          opportunityHeaderCell.innerHTML = "Opportunity";
+          opportunityHeaderCell.style.backgroundColor='#f2f2f2';
+          opportunityHeaderCell.style.fontWeight='bold';
+
+          for (var i = 0; i < criteriaList.length; i++) {
+            var criteriaHeaderCell = headerRow.insertCell(i + 1);
+            criteriaHeaderCell.innerHTML = criteriaList[i];
+            criteriaHeaderCell.style.backgroundColor='#f2f2f2'
+            criteriaHeaderCell.style.fontWeight='bold';
+          }
+
+          // Create rows dynamically based on the opportunity and criteria lists
+          for (var i = 0; i < opportunityList.length; i++) {
+            var row = table.insertRow(i + 1);
+            var opportunityCell = row.insertCell(0);
+            opportunityCell.innerHTML = opportunityList[i];
+            opportunityCell.style.backgroundColor='#f2f2f2';
+            opportunityCell.style.fontWeight='bold';
+            for (var j = 0; j < criteriaList.length; j++) {
+              var cell = row.insertCell(j + 1);
+              var input = document.createElement("input");
+              input.type = "number";
+              input.min = 1;
+              input.max = 9;
+              input.oninput = checkTableFilled;
+              input.addEventListener(
+                "input",
+                updateDecisionScore.bind(null, i, j)
+              );
+              cell.appendChild(input);
+            }
+          }
+
+          var theDiv=document.createElement('div')
+          theDiv.classList.add('d-flex')
+          theDiv.classList.add('justify-content-between')
+          
+          var nextButton = document.createElement("button");
+          nextButton.id = "nextButton";
+          nextButton.classList.add('btn')
+          nextButton.classList.add('btn-primary')
+          nextButton.style.display = "none";
+          nextButton.onclick = showDecision;
+          nextButton.innerHTML = "Suivant";
+
+          resultSection.appendChild(table);
+          // resultSection.appendChild(nextButton);
+          resultSection.appendChild(theDiv)
+          var backToComparison=document.createElement('button')
+          backToComparison.classList.add('btn')
+          backToComparison.classList.add('btn-secondary')
+          backToComparison.id='back-to-comparison-btn'
+          backToComparison.onclick=goToComparisonView
+          backToComparison.textContent='Retour'
+
+          theDiv.appendChild(backToComparison)
+          theDiv.appendChild(nextButton)
+          // Additional components indicating consistency can be added here
+        } else {
+          // Display red color and ejection components indicating inconsistency
+          var errorText = document.createElement("p");
+          errorText.textContent = "The system is inconsistent.";
+          errorText.classList.add("error-text");
+          var xspan=document.createElement('span')
+          xspan.classList.add('bi')
+          xspan.classList.add('bi-x')
+          resultSection.appendChild(xspan)
+          resultSection.appendChild(errorText);
+          var backToComparison=document.createElement('button')
+          backToComparison.classList.add('btn')
+          backToComparison.classList.add('btn-secondary')
+          backToComparison.id='back-to-comparison-btn'
+          backToComparison.onclick=goToComparisonView
+          backToComparison.textContent='Back'
+          resultSection.appendChild(backToComparison)
+          // Additional components indicating inconsistency can be added here
+        }
+        
+      }
+
+      function updateDecisionScore(row, col) {
+        var value = parseInt(event.target.value);
+        if (!comparisonMatrix) {
+          decisionMatrix = [];
+          for (var i = 0; i < opportunityList.length; i++) {
+            decisionMatrix[i] = [];
+            for (var j = 0; j < criteriaList.length; j++) {
+              decisionMatrix[i][j] = null; // Initialize with null values
+            }
+          }
+        }
+
+        // Initialize decisionMatrix with empty arrays if not already initialized
+        if (!decisionMatrix[row]) {
+          for (var i = 0; i < opportunityList.length; i++) {
+            decisionMatrix[i] = [];
+            for (var j = 0; j < criteriaList.length; j++) {
+              decisionMatrix[i][j] = null; // Initialize with null values
+            }
+          }
+        }
+        if (!decisionMatrix[col]) {
+          for (var i = 0; i < opportunityList.length; i++) {
+            decisionMatrix[i] = [];
+            for (var j = 0; j < criteriaList.length; j++) {
+              decisionMatrix[i][j] = null; // Initialize with null values
+            }
+          }
+        }
+
+        decisionMatrix[row][col] = parseFloat(value);
+
+        var comparisonTable = document.getElementById("last-table");
+        var modifiedCell =
+          comparisonTable.rows[row + 1].cells[col + 1].querySelector("input");
+        modifiedCell.classList.add("modified-cell");
+      }
+      function showDecision() {
+        console.log(decisionMatrix);
+        var weightedSum = calculateWeightedSum(comparisonMatrix);
+        console.log(
+          "sortedAlternatives",
+          sortAlternatives(decisionMatrix, weightedSum)
+        );
+      }
+      function sortAlternatives(matrix, weightedSumVector) {
+        // Calculate the priority vector
+        var priorityVector = matrix.map(function (row) {
+          return row.reduce(function (sum, value, index) {
+            return sum + value * weightedSumVector[index];
+          }, 0);
+        });
+
+        // Create an array of objects with alternative index and priority value
+        var alternatives = priorityVector.map(function (value, index) {
+          return { index: index, priority: value };
+        });
+
+        // Sort the alternatives based on priority (in descending order)
+        alternatives.sort(function (a, b) {
+          return b.priority - a.priority;
+        });
+
+        // Extract the sorted alternative indices
+        var sortedAlternatives = alternatives.map(function (alternative) {
+          return alternative.index;
+        });
+        var sortedOpportunities = sortedAlternatives.map(function (index) {
+          return opportunityList[index];
+        });
+        // return sortedOpportunities;
+
+        var tableElement = document.getElementById("result-section");
+        tableElement.style.display = "none";
+
+        // Create a new list element for sorted opportunities
+        var sortedOpportunitiesList = document.createElement("ol");
+        sortedOpportunitiesList.id = "sortedOpportunitiesList";
+        sortedOpportunitiesList.style.alignSelf='center'
+        sortedOpportunitiesList.style.textAlign='center'
+        // Add sorted opportunities to the list
+        sortedOpportunities.forEach(function (opportunity, index) {
+          var listItem = document.createElement("li");
+          listItem.textContent = opportunity;
+          listItem.style.fontWeight='bolder';
+          var font = Math.max(16,50 - index * 10 )
+          listItem.style.fontSize = font+ "px"; // Decrease font size from most important to least important
+          sortedOpportunitiesList.appendChild(listItem);
+        });
+
+        // Append the sorted opportunities list to the document
+        var sectionElement = document.getElementById("opportunitiesSection");
+        var backButton = document.createElement("button");
+        backButton.textContent = "Retour";
+        backButton.classList.add('btn')
+        backButton.classList.add('btn-secondary')
+        backButton.onclick = function () {
+          // Show the decision table
+          tableElement.style.display = "block";
+
+          // Remove the sorted opportunities list
+          sortedOpportunitiesList.remove();
+
+          // Remove the back button
+          backButton.remove();
+        };
+        sectionElement.appendChild(sortedOpportunitiesList);
+        sectionElement.style.display = "block";
+        sectionElement.appendChild(backButton);
+      }
+
+      function checkTableFilled() {
+        var table = document.getElementById("last-table");
+        var inputs = table.getElementsByTagName("input");
+        var allFilled = true;
+        for (var i = 0; i < inputs.length; i++) {
+          if (inputs[i].value === "") {
+            allFilled = false;
+            break;
+          }
+        }
+        nextButton.style.display = allFilled ? "block" : "none";
+      }
+
+      function calculateWeightedSum(comparisonMatrix) {
+        var weightedSum = [];
+        var sumColumns = [];
+        // Calculate the weighted sum for each criterion
+        for (var i = 0; i < comparisonMatrix.length; i++) {
+          sumColumns[i] = 0;
+          for (var j = 0; j < comparisonMatrix.length; j++) {
+            sumColumns[i] += comparisonMatrix[j][i];
+          }
+        }
+        for (var i = 0; i < comparisonMatrix.length; i++) {
+          var row = comparisonMatrix[i];
+          var sum = 0;
+
+          // Calculate the sum of the row values
+          for (var j = 0; j < row.length; j++) {
+            sum += row[j] / sumColumns[j];
+          }
+
+          weightedSum.push(sum / row.length);
+        }
+        console.log("weightedSum= ", weightedSum);
+        return weightedSum;
+      }
+
+      // function calculatePriorityWeights(weightedSum) {
+      //   var priorityWeights = [];
+
+      //   // Calculate the priority weights based on the weighted sum
+      //   var totalWeightedSum = weightedSum.reduce(function(acc, value) {
+      //     return acc + value;
+      //   }, 0);
+
+      //   for (var i = 0; i < weightedSum.length; i++) {
+      //     var weight = weightedSum[i] / totalWeightedSum;
+      //     priorityWeights.push(weight);
+      //   }
+      //   console.log('priorityWeights = ', priorityWeights)
+      //   return priorityWeights;
+      // }
+
+      function performConsistencyCheck(comparisonMatrix, weightedSum) {
+        var n = comparisonMatrix.length;
+        var Ws = [];
+        // Calculate the consistency check
+        for (var i = 0; i < n; i++) {
+          Ws[i] = 0;
+          for (var j = 0; j < n; j++) {
+            Ws[i] += comparisonMatrix[i][j] * weightedSum[j];
+          }
+        }
+        console.log("Ws= ", Ws);
+
+        var lambda = 0.0;
+        for (var j = 0; j < n; j++) {
+          lambda += Ws[j] / weightedSum[j];
+        }
+        lambda /= n;
+        var ri = calculateRandomIndex(n);
+        var ci = (lambda - n) / (n - 1);
+        console.log("ci= ", ci);
+        console.log("ri = ", ri);
+        return ci / ri;
+      }
+
+      function calculateRandomIndex(matrixSize) {
+        var randomIndexValues = [
+          0, 0, 0.58, 0.9, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49,
+        ];
+
+        if (matrixSize >= 1 && matrixSize <= 10) {
+          return randomIndexValues[matrixSize - 1];
+        } else {
+          // Return an appropriate value or handle the error
+          return 0;
+        }
+      }
+
+      function showLoadingState() {
+        document.getElementById("pairwise-comparison-section").style.display =
+          "none";
+        document.getElementById("loading-section").style.display = "block";
+      }
+      // var backToComparisonBtn = document.getElementById("back-to-comparison-btn");
+      //   backToComparisonBtn.addEventListener("click", goToComparisonView);
+
+      // Go to Comparison View function
+      function goToComparisonView() {
+        var comparisonView = document.getElementById(
+          "pairwise-comparison-section"
+        );
+        var consistencyView = document.getElementById("result-section");
+        console.log("back-to-comparison-btn");
+        comparisonView.style.display = "block";
+        consistencyView.style.display = "none";
+      }
+
+      function showResultSection(isConsistent) {
+        document.getElementById("loading-section").style.display = "none";
+        var resultSection = document.getElementById("result-section");
+        resultSection.style.display = "block";
+
+        // Clear previous result contents
+        resultSection.innerHTML = "";
+
+        if (isConsistent) {
+          // Display green validation mark and other components signaling consistency
+          var validationMark = document.createElement("div");
+          validationMark.classList.add("validation-mark", "green");
+          resultSection.innerHTML =
+            '<button id="back-to-comparison-btn">Retour</button><div style="color:green">The system is consistent</div>';
+          resultSection.appendChild(validationMark);
+          scores = {};
+
+          // Additional components indicating consistency can be added here
+        } else {
+          // Display red color and ejection components indicating inconsistency
+          var errorText = document.createElement("p");
+          errorText.textContent = "The system is inconsistent.";
+          errorText.classList.add("error-text");
+          resultSection.appendChild(errorText);
+
+          // Additional components indicating inconsistency can be added here
+        }
+      }
+      toggleProceedButton();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

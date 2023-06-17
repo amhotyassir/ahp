@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  h2 {
+    margin-bottom: 10px;
+  }
+  
+  input[type="text"] {
+    width: 200px;
+    padding: 5px;
+  }
+  
+  button {
+    padding: 5px 10px;
+    margin-left: 10px;
+  }
+  
+  #chosen-criteria div {
+    margin-bottom: 5px;
+  }
+  
+  #comparison-table {
+    border-collapse: collapse;
+  }
+  
+  #comparison-table th,
+  #comparison-table td {
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: center;
+  }
+  
+  #weights-table {
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  #weights-table th,
+  #weights-table td {
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: center;
+  }
+  
+  #result-section {
+    margin-top: 20px;
+  }
+  
+  #result-section h2 {
+    margin-bottom: 5px;
+  }
+  
+  #result {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
